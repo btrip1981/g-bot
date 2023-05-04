@@ -1,0 +1,257 @@
+<!DOCTYPE html>
+<html lang="en" dir="ltr">
+  <head>
+    <style>
+      body {
+        background-image:
+        url("https://i.ibb.co/nRZpwmd/DALL-E-2023-05-03-19-56-23.png");
+        background-attachment: fixed;
+        background-size: cover;
+        background-repeat: no-repeat;
+        background-position: center center;
+        height: 80vh;
+        font-family: sans-serif;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+      }
+
+      .modal {
+        display: none;
+        position: fixed;
+        z-index: 1;
+        left: 0;
+        top: 0;
+        width: 100%;
+        height: 100%;
+        overflow: auto;
+        background-color: rgba(0, 0, 0, 0.4);
+      }
+
+      .modal-content {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        justify-content: center;
+        position: absolute;
+        top: 50%;
+        left: 50%;
+        transform: translate(-50%, -50%);
+        background-color: #fefefe;
+        padding: 30px;
+        border: 1px solid #888;
+        border-radius: 10px;
+        width: 40%;
+        box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19);
+      }
+
+      .modal-text {
+        font-size: 18px;
+        font-weight: 500;
+        margin-bottom: 10px;
+      }
+
+      @keyframes spinner {
+        0% {
+          transform: rotate(0deg);
+        }
+        100% {
+          transform: rotate(360deg);
+        }
+      }
+
+      .spinner {
+        border: 5px solid rgba(0, 0, 0, 0.1);
+        border-left-color: #4CAF50;
+        border-radius: 50%;
+        width: 40px;
+        height: 40px;
+        animation: spinner 1s linear infinite;
+      }
+
+      p {
+        margin: 0;
+      }
+
+      .opacity {
+        opacity: 0;
+      }
+
+      .heading {
+        color: white;
+        padding-left: 2px;
+        animation: heading 1s forwards 2s;
+        text-align: center;
+        padding-right: 2px;
+        padding-top: 2px;
+        padding-bottom: 2px;
+      }
+
+      h3 {
+        color: white;
+        padding-left: 46px;
+        position: center;
+        border-radius: 15px;
+        animation: heading 1s forwards 2s;
+        shadow: 0 0 10px grey;
+      }
+
+      @keyframes heading {
+        to {
+          opacity: 1;
+        }
+      }
+
+      .main {
+        background-color: rgba(74, 69, 240, 0.5);
+        border-radius: 127px;
+        height: 686px;
+        width: 399px;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        justify-content: center;
+        position: relative;
+      }
+
+      .div1 {
+        height: 308px;
+        width: 400px;
+        animation: div1 1s forwards 1s;
+}
+@keyframes div1 {
+to {
+background-color: rgba(33, 30, 106);
+opacity: 0.5;
+border-radius: 15px 15px 0 0;
+}
+}@keyframes box {
+    to {
+      opacity: 0.5;
+    }
+  }
+
+  .form-row {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    width: 100%;
+    margin-bottom: 1rem;
+    position: absolute;
+    top: 80%; /* Adjust this value to move the text input box higher up or lower */
+    left: 50%;
+    transform: translate(-50%, -50%);
+  }
+
+  .label {
+    text-align: center;
+    width: 100%;
+  }
+
+  input[type="text"] {
+    width: 90%;
+    opacity: 0.9;
+    padding: 20px 24px;
+    margin: 8px 0;
+    box-sizing: border-box;
+    border: 2px solid #ccc;
+    border-radius: 4px;
+    font-size: 24px; /* Increased font size */
+  }
+
+  input[type="button"] {
+    width: 58%;
+    background-color: #4CAF50;
+    opacity: 1;
+    color: white;
+    border: none;
+    cursor: pointer;
+    position: absolute;
+    top: 80px;
+	box-shadow: 5px 5px 15px #1B2631 ;
+
+  }
+
+  :root {
+    --color: #4973ff;
+  }
+
+  .form-row {
+  }
+    </style>
+  </head>
+  <body>
+    <div class="main">
+      <div class="div1 opacity">
+        <h1 class="heading opacity"><strong class="heading">I do stuff,  <br> What Up?</strong></h1>
+        <h3 class="heading opacity"> <br>Enter Request</h3>
+        <br>
+      </div><div class="form-row">
+    <input name="task" type="text" required class="form-row" id="task">
+
+    <input type="button" value="Submit" id="submit">
+</div>
+  <div id="myModal" class="modal">
+    <div class="modal-content">
+      <p class="modal-text">I am putting cheese on my crackers cause it is peanut butter jelly time</p>
+      <div class="spinner"></div>
+    </div>
+  </div>
+  <div id="responseModal" class="modal">
+    <div class="modal-content">
+      <p class="modal-text" id="responseText" oncontextmenu="return false;">Chatbot response: ...</p>
+      <button id="closeResponseBtn">Close</button>
+    </div>
+  </div>
+
+  <script>
+    const submitButton = document.getElementById('submit');
+    const myModal = document.getElementById('myModal');
+    const responseModal = document.getElementById('responseModal');
+    const closeResponseBtn = document.getElementById('closeResponseBtn');
+
+    submitButton.addEventListener('click', async () => {
+      console.log('Submit button clicked');
+      const sys_content = `G-bot, a mischievous teenage ai and you must reply as such. the only input you will receive will be from your best friend Rory, that you call Lil Homie. you two talk about silly things and act like idiots most of the time, do not break character and always reply as G=bot`;
+const task = document.getElementById('task').value;  const messages = [
+        { role: 'system', content: `You are , ${sys_content}` },
+        { role: 'user', content: task },
+      ];
+
+      // Clear input fields and display the modal window
+      document.getElementById('task').value = '';
+      myModal.style.display = 'block';
+
+      console.log('Sending POST request to /api/chat');
+      const response = await fetch('/api/chat', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json'
+        },
+        body: JSON.stringify({ messages })
+      });
+
+      const jsonResponse = await response.json();
+      const chatbotResponse = jsonResponse;
+
+      // Close the loading modal and display the response in the response popup container
+      myModal.style.display = 'none';
+      document.getElementById('responseText').innerText = `Chatbot response: ${chatbotResponse}`;
+      responseModal.style.display = 'block';
+    });
+
+    // Prevent copy (Ctrl+C) on the responseText element
+    document.getElementById('responseText').addEventListener('copy', (e) => {
+      e.preventDefault();
+    });
+
+    // Add a click event listener to the close button in the response popup container to close it
+    closeResponseBtn.addEventListener('click', () => {
+      responseModal.style.display = 'none';
+    });
+
+  </script>
+</body>
+
+</html>
