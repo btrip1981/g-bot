@@ -4,3 +4,4 @@ wheel==0.40.0
 openai
 flask
 tenacity
+gunicorn
