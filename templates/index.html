@@ -210,48 +210,58 @@ border-radius: 15px 15px 0 0;
     const myModal = document.getElementById('myModal');
     const responseModal = document.getElementById('responseModal');
     const closeResponseBtn = document.getElementById('closeResponseBtn');
+    const sendResponseBtn = document.getElementById("sendResponseBtn");
+	  
+    async function sendChatRequest(task) {
+        const sys_content = `G-bot, a mischievous teenage ai and you must reply as such. the only input you will receive will be from your best friend Rory, that you call Lil Homie. you two talk about silly things and act like idiots most of the time, do not break character and always reply as G=bot`;
+        const messages = [
+          { role: "system", content: `You are , ${sys_content}` },
+          { role: "user", content: task },
+        ];
 
-    submitButton.addEventListener('click', async () => {
-      console.log('Submit button clicked');
-      const sys_content = `G-bot, a mischievous teenage ai and you must reply as such. the only input you will receive will be from your best friend Rory, that you call Lil Homie. you two talk about silly things and act like idiots most of the time, do not break character and always reply as G=bot`;
-const task = document.getElementById('task').value;  const messages = [
-        { role: 'system', content: `You are , ${sys_content}` },
-        { role: 'user', content: task },
-      ];
+     myModal.style.display = "block";
 
-      // Clear input fields and display the modal window
-      document.getElementById('task').value = '';
-      myModal.style.display = 'block';
+        console.log("Sending POST request to /api/chat");
+        const response = await fetch("/api/chat", {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify({ messages }),
+        });
 
-      console.log('Sending POST request to /api/chat');
-      const response = await fetch('/api/chat', {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json'
-        },
-        body: JSON.stringify({ messages })
+        const jsonResponse = await response.json();
+        const chatbotResponse = jsonResponse;
+
+        myModal.style.display = "none";
+        document.getElementById("responseText").innerText = `Gbot: ${chatbotResponse}`;
+        responseModal.style.display = "block";
+      }
+
+      submitButton.addEventListener("click", async () => {
+        console.log("Submit button clicked");
+        const task = document.getElementById("task").value;
+        document.getElementById("task").value = "";
+        await sendChatRequest(task);
       });
 
-      const jsonResponse = await response.json();
-      const chatbotResponse = jsonResponse;
+      sendResponseBtn.addEventListener("click", async () => {
+        console.log("Send button clicked");
+        const userInput = document.getElementById("userInput").value;
+        document.getElementById("userInput").value = "";
+        await sendChatRequest(userInput);
+      });
 
-      // Close the loading modal and display the response in the response popup container
-      myModal.style.display = 'none';
-      document.getElementById('responseText').innerText = `Chatbot response: ${chatbotResponse}`;
-      responseModal.style.display = 'block';
-    });
+      document
+        .getElementById("responseText")
+        .addEventListener("copy", (e) => {
+          e.preventDefault();
+        });
 
-    // Prevent copy (Ctrl+C) on the responseText element
-    document.getElementById('responseText').addEventListener('copy', (e) => {
-      e.preventDefault();
-    });
-
-    // Add a click event listener to the close button in the response popup container to close it
-    closeResponseBtn.addEventListener('click', () => {
-      responseModal.style.display = 'none';
-    });
-
-  </script>
+      closeResponseBtn.addEventListener("click", () => {
+        responseModal.style.display = "none";
+      });
+    </script>
 </body>
 
 </html>
