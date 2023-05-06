@@ -198,13 +198,20 @@ border-radius: 15px 15px 0 0;
       <div class="spinner"></div>
     </div>
   </div>
-  <div id="responseModal" class="modal">
-    <div class="modal-content">
-      <p class="modal-text" id="responseText" oncontextmenu="return false;">Chatbot response: ...</p>
-      <button id="closeResponseBtn">Close</button>
+     <div id="responseModal" class="modal">
+      <div class="modal-content">
+        <p class="modal-text" id="responseText" oncontextmenu="return false;">
+          Chatbot response: ...
+        </p>
+        <input
+          type="text"
+          id="userInput"
+          placeholder="Type your message..."
+        />
+        <button id="sendResponseBtn">Send</button>
+        <button id="closeResponseBtn">Close</button>
+      </div>
     </div>
-  </div>
-
   <script>
     const submitButton = document.getElementById('submit');
     const myModal = document.getElementById('myModal');
